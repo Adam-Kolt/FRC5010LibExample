@@ -4,11 +4,11 @@
 
 package org.frc5010.common.config;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import edu.wpi.first.wpilibj.Filesystem;
 import java.io.File;
 import java.io.IOException;
 import java.util.Map;
+import java.util.Optional;
+
 import org.frc5010.common.arch.GenericRobot;
 import org.frc5010.common.config.json.CameraConfigurationJson;
 import org.frc5010.common.config.json.DriveteamControllersJson;
@@ -17,13 +17,17 @@ import org.frc5010.common.config.json.RobotJson;
 import org.frc5010.common.config.json.VisionPropertiesJson;
 import org.frc5010.common.config.json.YAGSLDrivetrainJson;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import edu.wpi.first.wpilibj.Filesystem;
+
 /** RobotParser is used to parse JSON configuration files to build a robot. */
 public class RobotParser {
   private static DriveteamControllersJson controllersJson;
   private static Map<String, DriveteamControllerConfiguration> controllersMap;
   private static VisionPropertiesJson visionJson;
   private static Map<String, CameraConfigurationJson> camerasMap;
-  private static DrivetrainPropertiesJson driveTrainJson;
+  private static Optional<DrivetrainPropertiesJson> driveTrainJson = Optional.empty();
 
   /**
    * Creates a new RobotParser.
@@ -61,18 +65,10 @@ public class RobotParser {
                   .readValue(
                       new File(directory, "yagsl_drivetrain.json"), YAGSLDrivetrainJson.class);
           yagslDriveTrainJson.readDrivetrainConfiguration(robot, directory);
-          driveTrainJson = yagslDriveTrainJson;
+          driveTrainJson = Optional.of(yagslDriveTrainJson);
           break;
         }
-      default:
-        {
-          driveTrainJson =
-              new ObjectMapper()
-                  .readValue(
-                      new File(directory, "drivetrain.json"), DrivetrainPropertiesJson.class);
-          driveTrainJson.readDrivetrainConfiguration(robot, directory);
-          break;
-        }
+      default: break;
     }
     robotJson.readMechanismDefinitionss(robot);
   }
@@ -83,9 +79,7 @@ public class RobotParser {
    * @param directory the directory to check for JSON configuration files
    */
   private void checkDirectory(File directory) {
-    assert new File(directory, "controller.json").exists();
-    assert new File(directory, "vision.json").exists();
-    assert new File(directory, "drivetrain.json").exists();
+    assert new File(directory, "robot.json").exists();
   }
 
   /**
@@ -96,6 +90,6 @@ public class RobotParser {
   public void createRobot(GenericRobot robot) {
     controllersJson.createControllers(robot, controllersMap);
     visionJson.createCameraSystem(robot, camerasMap);
-    driveTrainJson.createDriveTrain(robot);
+    driveTrainJson.ifPresent(it -> it.createDriveTrain(robot));
   }
 }
