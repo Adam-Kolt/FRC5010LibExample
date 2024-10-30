@@ -67,12 +67,13 @@ public abstract class GenericRobot extends GenericMechanism {
 
       driver = Optional.ofNullable(controllers.get("driver"));
       operator = Optional.ofNullable(controllers.get("operator"));
-      operator.ifPresent(op -> {
-        if (!op.isPluggedIn()) {
-          operator = driver;
-          driver.ifPresent(it -> it.setSingleControllerMode(true));
-        }
-      });
+      operator.ifPresent(
+          op -> {
+            if (!op.isPluggedIn()) {
+              operator = driver;
+              driver.ifPresent(it -> it.setSingleControllerMode(true));
+            }
+          });
       DriverStation.silenceJoystickConnectionWarning(true);
       alliance = determineAllianceColor();
       values.declare("Alliance", alliance.toString());

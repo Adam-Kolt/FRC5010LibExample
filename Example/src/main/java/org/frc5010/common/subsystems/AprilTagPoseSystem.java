@@ -156,4 +156,21 @@ public class AprilTagPoseSystem extends CameraSystem {
     double calib = distance * 0.15;
     return VecBuilder.fill(calib, calib, Units.degreesToRadians(5 * distance));
   }
+
+  /**
+   * Determines if any cameras have a valida target
+   *
+   * @return true if any cameras have a valid target
+   */
+  @Override
+  public boolean hasValidTarget() {
+    for (GenericCamera camera : cameras) {
+      if (camera.hasValidTarget()) {
+        values.set(HAS_VALID_TARGET, true);
+        return true;
+      }
+    }
+    values.set(HAS_VALID_TARGET, false);
+    return false;
+  }
 }

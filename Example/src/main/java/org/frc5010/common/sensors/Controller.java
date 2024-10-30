@@ -4,15 +4,14 @@
 
 package org.frc5010.common.sensors;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj.GenericHID.HIDType;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
+import java.util.HashMap;
+import java.util.Map;
 
 /** Add your docs here. */
 public class Controller {
@@ -30,13 +29,16 @@ public class Controller {
       LEFT_STICK_BUTT,
       RIGHT_STICK_BUTT;
   private POVButton UP, RIGHT, DOWN, LEFT;
-  private Map<Integer, Axis> axisMap = new HashMap<>(Map.of(
-    AxisNums.LEFT_X.ordinal(), new Axis(),
-    AxisNums.LEFT_Y.ordinal(), new Axis(),
-    AxisNums.L_TRIGGER.ordinal(), new Axis(),
-    AxisNums.R_TRIGGER.ordinal(), new Axis(),
-    AxisNums.RIGHT_X.ordinal(), new Axis(),
-    AxisNums.RIGHT_Y.ordinal(), new Axis()));
+  private Map<Integer, Axis> axisMap =
+      new HashMap<>(
+          Map.of(
+              AxisNums.LEFT_X.ordinal(), new Axis(),
+              AxisNums.LEFT_Y.ordinal(), new Axis(),
+              AxisNums.L_TRIGGER.ordinal(), new Axis(),
+              AxisNums.R_TRIGGER.ordinal(), new Axis(),
+              AxisNums.RIGHT_X.ordinal(), new Axis(),
+              AxisNums.RIGHT_Y.ordinal(), new Axis()));
+
   private static enum AxisNums {
     LEFT_X,
     LEFT_Y,

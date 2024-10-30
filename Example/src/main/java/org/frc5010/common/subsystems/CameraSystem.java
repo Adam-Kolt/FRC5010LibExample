@@ -4,6 +4,7 @@
 
 package org.frc5010.common.subsystems;
 
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import org.frc5010.common.arch.GenericSubsystem;
 import org.frc5010.common.sensors.camera.GenericCamera;
 
@@ -15,6 +16,7 @@ public abstract class CameraSystem extends GenericSubsystem {
   /** The camera object. */
   protected GenericCamera camera;
 
+  protected String HAS_VALID_TARGET = "hasValidTarget";
   /**
    * Creates a new CameraSystem.
    *
@@ -23,6 +25,7 @@ public abstract class CameraSystem extends GenericSubsystem {
   public CameraSystem(GenericCamera camera) {
     super();
     this.camera = camera;
+    values.declare(HAS_VALID_TARGET, false);
   }
 
   /**
@@ -50,4 +53,15 @@ public abstract class CameraSystem extends GenericSubsystem {
    * @return the distance to the target
    */
   public abstract double getDistanceToTarget();
+
+  /**
+   * Does the camera have a valid target?
+   *
+   * @return true if the camera has a valid target
+   */
+  protected abstract boolean hasValidTarget();
+
+  public Trigger hasAValidTarget() {
+    return new Trigger(this::hasValidTarget);
+  }
 }
