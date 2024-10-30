@@ -35,9 +35,6 @@ public class ExampleRobot extends GenericRobot{
   public void setupDefaultCommands(Controller driver, Controller operator) {
     drivetrain.setDefaultCommand(drivetrain.createDefaultCommand(driver));
     runner.setDefaultCommand(Commands.run(() -> runner.runMotor(driver.getRightYAxis()), runner));
-
-    
-
   }
 
   @Override
