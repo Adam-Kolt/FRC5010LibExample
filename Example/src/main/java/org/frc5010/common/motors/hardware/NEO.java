@@ -4,6 +4,7 @@
 
 package org.frc5010.common.motors.hardware;
 
+import edu.wpi.first.math.system.plant.DCMotor;
 import org.frc5010.common.motors.MotorConstants;
 
 /** Add your docs here. */
@@ -16,5 +17,15 @@ public class NEO extends GenericRevBrushlessMotor {
 
   public NEO(int port, int currentLimit) {
     super(port, currentLimit);
+  }
+
+  @Override
+  public DCMotor getMotorSimulationType() {
+    return DCMotor.getNEO(1);
+  }
+
+  @Override
+  public double getMaxRPM() {
+    return MAXRPM;
   }
 }

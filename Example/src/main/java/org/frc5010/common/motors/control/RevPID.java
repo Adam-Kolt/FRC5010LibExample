@@ -4,14 +4,14 @@
 
 package org.frc5010.common.motors.control;
 
-import com.revrobotics.CANSparkBase.ControlType;
-import com.revrobotics.SparkPIDController;
 import org.frc5010.common.constants.GenericPID;
-import org.frc5010.common.motors.PIDController5010;
 import org.frc5010.common.motors.hardware.GenericRevBrushlessMotor;
 
+import com.revrobotics.CANSparkBase.ControlType;
+import com.revrobotics.SparkPIDController;
+
 /** Add your docs here. */
-public class RevPID implements PIDController5010 {
+public class RevPID extends GenericPIDController {
   GenericRevBrushlessMotor motor;
   SparkPIDController controller;
   ControlType sparkControlType = ControlType.kVoltage;

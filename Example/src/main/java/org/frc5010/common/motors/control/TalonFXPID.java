@@ -4,18 +4,19 @@
 
 package org.frc5010.common.motors.control;
 
+import org.frc5010.common.constants.GenericPID;
+import org.frc5010.common.motors.hardware.GenericTalonFXMotor;
+
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.controls.VoltageOut;
+
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import org.frc5010.common.constants.GenericPID;
-import org.frc5010.common.motors.PIDController5010;
-import org.frc5010.common.motors.hardware.GenericTalonFXMotor;
 
 /** Add your docs here. */
-public class TalonFXPID implements PIDController5010 {
+public class TalonFXPID extends GenericPIDController {
   GenericTalonFXMotor motor;
   Slot0Configs PIDConfigs = new Slot0Configs();
   PIDControlType controlType = PIDControlType.VOLTAGE;

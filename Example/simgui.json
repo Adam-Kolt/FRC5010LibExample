@@ -39,6 +39,9 @@
           "open": true
         },
         "open": true
+      },
+      "VelocityControlMotor": {
+        "open": true
       }
     }
   },
