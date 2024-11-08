@@ -4,11 +4,10 @@
 
 package org.frc5010.common.motors.control;
 
-import org.frc5010.common.constants.GenericPID;
-import org.frc5010.common.motors.hardware.GenericRevBrushlessMotor;
-
 import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.SparkPIDController;
+import org.frc5010.common.constants.GenericPID;
+import org.frc5010.common.motors.hardware.GenericRevBrushlessMotor;
 
 /** Add your docs here. */
 public class RevPID extends GenericPIDController {

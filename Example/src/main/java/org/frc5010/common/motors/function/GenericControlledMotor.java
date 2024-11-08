@@ -131,7 +131,7 @@ public class GenericControlledMotor extends GenericFunctionalMotor implements PI
 
   @Override
   public double calculateControlEffort(double current) {
-    return pid.calculateControlEffort(current) + getFeedForward(); 
+    return pid.calculateControlEffort(current) + getFeedForward();
   }
 
   public void setMotorFeedFwd(MotorFeedFwdConstants feedFwd) {
@@ -143,6 +143,8 @@ public class GenericControlledMotor extends GenericFunctionalMotor implements PI
   }
 
   public double getFeedForward() {
-    return null == feedFwd ? 0.0 : pid.getReference() * (feedFwd.getkVC() + feedFwd.getkAC()) + feedFwd.getkSC();
+    return null == feedFwd
+        ? 0.0
+        : pid.getReference() * (feedFwd.getkVC() + feedFwd.getkAC()) + feedFwd.getkSC();
   }
 }

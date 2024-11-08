@@ -4,14 +4,8 @@
 
 package org.frc5010.common.motors.function;
 
-import org.frc5010.common.constants.RobotConstantsDef;
-import org.frc5010.common.motors.MotorController5010;
-import org.frc5010.common.motors.MotorFactory;
-import org.frc5010.common.sensors.encoder.GenericEncoder;
-import org.frc5010.common.sensors.encoder.SimulatedEncoder;
-import org.frc5010.common.telemetry.DisplayDouble;
-
 import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.simulation.BatterySim;
 import edu.wpi.first.wpilibj.simulation.FlywheelSim;
 import edu.wpi.first.wpilibj.simulation.RoboRioSim;
@@ -19,7 +13,12 @@ import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
 import edu.wpi.first.wpilibj.util.Color8Bit;
-import frc.robot.Robot;
+import org.frc5010.common.constants.RobotConstantsDef;
+import org.frc5010.common.motors.MotorController5010;
+import org.frc5010.common.motors.MotorFactory;
+import org.frc5010.common.sensors.encoder.GenericEncoder;
+import org.frc5010.common.sensors.encoder.SimulatedEncoder;
+import org.frc5010.common.telemetry.DisplayDouble;
 
 /** Add your docs here. */
 public class VelocityControlMotor extends GenericControlledMotor {
@@ -29,9 +28,12 @@ public class VelocityControlMotor extends GenericControlledMotor {
   protected FlywheelSim simMotor;
   protected SimulatedEncoder simEncoder;
   protected GenericEncoder encoder;
-  protected DisplayDouble reference = new DisplayDouble(0, "reference", VelocityControlMotor.class.getSimpleName());
-  protected DisplayDouble velocity = new DisplayDouble(0, "velocity", VelocityControlMotor.class.getSimpleName());
-  protected DisplayDouble control = new DisplayDouble(0, "control", VelocityControlMotor.class.getSimpleName());
+  protected DisplayDouble reference =
+      new DisplayDouble(0, "reference", VelocityControlMotor.class.getSimpleName());
+  protected DisplayDouble velocity =
+      new DisplayDouble(0, "velocity", VelocityControlMotor.class.getSimpleName());
+  protected DisplayDouble control =
+      new DisplayDouble(0, "control", VelocityControlMotor.class.getSimpleName());
 
   public VelocityControlMotor(MotorController5010 motor) {
     super(motor);
@@ -40,8 +42,9 @@ public class VelocityControlMotor extends GenericControlledMotor {
 
   public VelocityControlMotor setupSimulatedMotor(double gearing, double jKgMetersSquared) {
     simMotor = new FlywheelSim(_motor.getMotorSimulationType(), gearing, jKgMetersSquared);
-    simEncoder = new SimulatedEncoder(
-        MotorFactory.getNextSimEncoderPort(), MotorFactory.getNextSimEncoderPort());
+    simEncoder =
+        new SimulatedEncoder(
+            MotorFactory.getNextSimEncoderPort(), MotorFactory.getNextSimEncoderPort());
     return this;
   }
 
@@ -50,14 +53,17 @@ public class VelocityControlMotor extends GenericControlledMotor {
       Mechanism2d visualizer, Pose3d robotToMotor, String visualName) {
     super.setVisualizer(visualizer, robotToMotor, visualName);
 
-    root = visualizer.getRoot(
-        _visualName,
-        robotToMotor.getX() * RobotConstantsDef.robotVisualH,
-        robotToMotor.getZ() * RobotConstantsDef.robotVisualV);
-    speedometer = new MechanismLigament2d(
-        visualName + "-velocity", 5, 0, 5, new Color8Bit(MotorFactory.getNextVisualColor()));
-    setpoint = new MechanismLigament2d(
-        visualName + "-setpoint", 5, 0, 5, new Color8Bit(MotorFactory.getNextVisualColor()));
+    root =
+        visualizer.getRoot(
+            _visualName,
+            robotToMotor.getX() * RobotConstantsDef.robotVisualH,
+            robotToMotor.getZ() * RobotConstantsDef.robotVisualV);
+    speedometer =
+        new MechanismLigament2d(
+            visualName + "-velocity", 5, 0, 5, new Color8Bit(MotorFactory.getNextVisualColor()));
+    setpoint =
+        new MechanismLigament2d(
+            visualName + "-setpoint", 5, 0, 5, new Color8Bit(MotorFactory.getNextVisualColor()));
     root.append(speedometer);
     root.append(setpoint);
     return this;
@@ -66,7 +72,7 @@ public class VelocityControlMotor extends GenericControlledMotor {
   @Override
   public void draw() {
     double currentVelocity = 0;
-    if (Robot.isReal()) {
+    if (RobotBase.isReal()) {
       currentVelocity = encoder.getVelocity();
     } else {
       currentVelocity = simEncoder.getVelocity();
@@ -86,5 +92,4 @@ public class VelocityControlMotor extends GenericControlledMotor {
     RoboRioSim.setVInVoltage(
         BatterySim.calculateDefaultBatteryLoadedVoltage(simMotor.getCurrentDrawAmps()));
   }
-
 }

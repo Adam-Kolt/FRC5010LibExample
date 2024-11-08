@@ -184,4 +184,3 @@ public class GenericRevBrushlessMotor extends CANSparkMax implements MotorContro
     throw new UnsupportedOperationException("Unimplemented method 'getMaxRPM'");
   }
 }
-

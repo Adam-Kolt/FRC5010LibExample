@@ -53,8 +53,7 @@ public class PercentControlMotor extends GenericFunctionalMotor {
             robotToMotor.getZ() * RobotConstantsDef.robotVisualV);
     speedometer =
         new MechanismLigament2d(
-            visualName + "-speed", 5, 0, 5, 
-                new Color8Bit(MotorFactory.getNextVisualColor()));
+            visualName + "-speed", 5, 0, 5, new Color8Bit(MotorFactory.getNextVisualColor()));
     root.append(speedometer);
     return this;
   }
