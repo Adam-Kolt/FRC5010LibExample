@@ -5,11 +5,17 @@
 package org.frc5010.common.arch;
 
 import edu.wpi.first.util.sendable.SendableBuilder;
+import edu.wpi.first.wpilibj.event.EventLoop;
 import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
+
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.BooleanSupplier;
+
 import org.frc5010.common.motors.function.GenericFunctionalMotor;
+import org.frc5010.common.units.Time;
 
 /** Base class for subsystems that provides default logging and network table support */
 public class GenericSubsystem extends SubsystemBase
@@ -22,6 +28,8 @@ public class GenericSubsystem extends SubsystemBase
   protected Mechanism2d mechanismSimulation;
   /** The map of devices created by the configuration system */
   protected Map<String, Object> devices = new HashMap<>();
+  /** The map of alternative EventLoops running at different rates */
+  protected Map<String, EventLoop> teleopEventLoops = new HashMap<>();
 
   /** Creates a new LoggedSubsystem. */
   public GenericSubsystem(Mechanism2d mechanismSimulation) {
@@ -114,5 +122,53 @@ public class GenericSubsystem extends SubsystemBase
                 ((GenericFunctionalMotor) it).simulationUpdate();
               }
             });
+  }
+
+  /**
+   * Create a new teleop event loop at a specific rate and register it with the TimedRobot
+   * 
+   * @param name the name of the event loop
+   * @param rate the rate of the event loop
+   */
+  public void createTeleopEventLoop(String name, Time rate) {
+    EventLoop eventLoop = new EventLoop();
+    teleopEventLoops.put(name, eventLoop);
+    // TODO: Register the event loop with the TimedRobot
+  }
+
+
+  /**
+   * Create a new teleop event loop at a specific rate and register it with the TimedRobot
+   * 
+   * @param name the name of the event loop
+   * @param rate the rate of the event loop
+   * @param offset the offset of the event loop relative to regular 20 ms loop
+   */
+  public void createTeleopEventLoop(String name, Time rate, Time offset) {
+    EventLoop eventLoop = new EventLoop();
+    teleopEventLoops.put(name, eventLoop);
+    // TODO: Register the event loop with the TimedRobot
+  }
+
+
+  /**
+   * Get a teleop event loop by name
+   * 
+   * @param name the name of the event loop
+   * @return the event loop
+   */
+  public EventLoop getEventLoop(String name) {
+    return teleopEventLoops.get(name);
+  }
+
+  /**
+   * Create a new trigger which runs on a specified event loop, with an different timing from the main 20ms loop
+   * 
+   * @param name the name of the event loop
+   * @param condition the condition for the trigger
+   * @return the trigger
+   */
+  public Trigger altTrigger(String name, BooleanSupplier condition) {
+    return new Trigger(getEventLoop(name), condition);
   }
 }
