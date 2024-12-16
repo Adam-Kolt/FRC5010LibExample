@@ -929,6 +929,10 @@ public class YAGSLSwerveDrivetrain extends SwerveDrivetrain {
     swerveDrive.addVisionMeasurement(robotPose, imageCaptureTime, stdVector);
   }
 
+  public Pose2d getMapleSimPose() {
+    return swerveDrive.getMapleSimDrive().get().getSimulatedDriveTrainPose();
+  }
+
   public Field2d getField2d() {
     return swerveDrive.field;
   }

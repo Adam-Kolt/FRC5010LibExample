@@ -144,7 +144,7 @@ public class DisplayValuesHelper implements WpiHelperInterface {
         return doubleValue;
     }
 
-    public DisplayDouble makConfigDouble(String name) {
+    public DisplayDouble makeConfigDouble(String name) {
         DisplayDouble doubleValue = new DisplayDouble(0, name, getNtName(), LogLevel.CONFIG);
         return doubleValue;
     }

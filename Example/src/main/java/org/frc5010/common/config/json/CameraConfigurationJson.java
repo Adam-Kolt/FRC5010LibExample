@@ -133,7 +133,7 @@ public class CameraConfigurationJson {
                 AprilTags.aprilTagFieldLayout,
                 PoseStrategy.valueOf(strategy),
                 robotToCamera,
-                robot.getPoseSupplier());
+                robot.getSimulatedPoseSupplier());
       } else if (targetFiducialIds.length > 0) {
         List<Integer> targetFiducialIdList = new ArrayList<>();
         for (int targetFiducialId : targetFiducialIds) {
@@ -146,7 +146,7 @@ public class CameraConfigurationJson {
                 AprilTags.aprilTagFieldLayout,
                 PoseStrategy.LOWEST_AMBIGUITY,
                 robotToCamera,
-                robot.getPoseSupplier(),
+                robot.getSimulatedPoseSupplier(),
                 targetFiducialIdList);
       } else if (targetHeight > 0) {
         camera =
@@ -156,7 +156,7 @@ public class CameraConfigurationJson {
                 AprilTags.aprilTagFieldLayout,
                 PoseStrategy.LOWEST_AMBIGUITY,
                 robotToCamera,
-                robot.getPoseSupplier());
+                robot.getSimulatedPoseSupplier());
       } else {
         camera =
             new SimulatedCamera(
@@ -165,7 +165,7 @@ public class CameraConfigurationJson {
                 AprilTags.aprilTagFieldLayout,
                 PoseStrategy.LOWEST_AMBIGUITY,
                 robotToCamera,
-                robot.getPoseSupplier());
+                robot.getSimulatedPoseSupplier());
       }
     }
     switch (use) {

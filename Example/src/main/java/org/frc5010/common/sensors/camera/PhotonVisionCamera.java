@@ -96,7 +96,7 @@ public class PhotonVisionCamera extends GenericCamera {
    */
   @Override
   public double getLatency() {
-    return Timer.getFPGATimestamp() - (camResult.getTimestampSeconds());
+    return camResult.getTimestampSeconds();
   }
 
   /**

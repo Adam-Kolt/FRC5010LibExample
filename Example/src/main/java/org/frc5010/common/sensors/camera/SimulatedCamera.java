@@ -29,12 +29,12 @@ public class SimulatedCamera extends PhotonVisionPoseCamera {
   /**
    * Constructor
    *
-   * @param name - the name of the camera
-   * @param colIndex - the column index for the dashboard
-   * @param fieldLayout - the field layout
-   * @param strategy - the pose strategy
+   * @param name          - the name of the camera
+   * @param colIndex      - the column index for the dashboard
+   * @param fieldLayout   - the field layout
+   * @param strategy      - the pose strategy
    * @param cameraToRobot - the camera-to-robot transform
-   * @param poseSupplier - the pose supplier
+   * @param poseSupplier  - the pose supplier
    */
   public SimulatedCamera(
       String name,
@@ -63,6 +63,14 @@ public class SimulatedCamera extends PhotonVisionPoseCamera {
 
     cameraSim = new PhotonCameraSim(camera, cameraProp);
     visionSim.addCamera(cameraSim, cameraToRobot);
+
+    // Enable the raw and processed streams. These are enabled by default.
+    cameraSim.enableRawStream(true);
+    cameraSim.enableProcessedStream(true);
+
+    // Enable drawing a wireframe visualization of the field to the camera streams.
+    // This is extremely resource-intensive and is disabled by default.
+    cameraSim.enableDrawWireframe(true);
   }
 
   /** Update the simulated camera */

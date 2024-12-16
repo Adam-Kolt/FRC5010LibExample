@@ -78,18 +78,18 @@ public abstract class GenericControlledMotor extends GenericFunctionalMotor
    */
   @Override
   protected void initiateDisplayValues() {
-    kP = _displayValuesHelper.makConfigDouble(K_P);
-    kI = _displayValuesHelper.makConfigDouble(K_I);
-    kD = _displayValuesHelper.makConfigDouble(K_D);
-    kF = _displayValuesHelper.makConfigDouble(K_F);
-    kS = _displayValuesHelper.makConfigDouble(K_S);
-    kV = _displayValuesHelper.makConfigDouble(K_V);
-    kA = _displayValuesHelper.makConfigDouble(K_A);
-    iZone = _displayValuesHelper.makConfigDouble(I_ZONE);
-    minOutput = _displayValuesHelper.makConfigDouble(MIN_OUTPUT);
-    maxOutput = _displayValuesHelper.makConfigDouble(MAX_OUTPUT);
+    kP = _displayValuesHelper.makeConfigDouble(K_P);
+    kI = _displayValuesHelper.makeConfigDouble(K_I);
+    kD = _displayValuesHelper.makeConfigDouble(K_D);
+    kF = _displayValuesHelper.makeConfigDouble(K_F);
+    kS = _displayValuesHelper.makeConfigDouble(K_S);
+    kV = _displayValuesHelper.makeConfigDouble(K_V);
+    kA = _displayValuesHelper.makeConfigDouble(K_A);
+    iZone = _displayValuesHelper.makeConfigDouble(I_ZONE);
+    minOutput = _displayValuesHelper.makeConfigDouble(MIN_OUTPUT);
+    maxOutput = _displayValuesHelper.makeConfigDouble(MAX_OUTPUT);
     reference = _displayValuesHelper.makeDisplayDouble(REFERENCE);
-    tolerance = _displayValuesHelper.makConfigDouble(TOLERANCE);
+    tolerance = _displayValuesHelper.makeConfigDouble(TOLERANCE);
     feedForward = _displayValuesHelper.makeDisplayDouble(FEEDFORWARD);
     controlType = _displayValuesHelper.makeDisplayString(CONTROL_TYPE);
     position = _displayValuesHelper.makeDisplayDouble(POSITION);

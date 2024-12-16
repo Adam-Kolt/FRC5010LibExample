@@ -49,7 +49,7 @@ public class DisplayValueSubsystem extends GenericSubsystem {
         displayValues.nextColumn("Config");
         inputAngle = displayValues.makeConfigAngle("INPUT_ANGLE");
         inputBoolean = displayValues.makeConfigBoolean("INPUT_BOOLEAN");
-        inputDouble = displayValues.makConfigDouble("INPUT_DOUBLE");
+        inputDouble = displayValues.makeConfigDouble("INPUT_DOUBLE");
         inputFloat = displayValues.makeConfigFloat("INPUT_FLOAT");
         displayValues.nextColumn("Input");
         inputLength = displayValues.makeConfigLength("INPUT_LENGTH");

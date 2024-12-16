@@ -46,9 +46,14 @@ public abstract class GenericRobot extends GenericMechanism implements GenericDe
   protected RobotParser parser;
   /** Constants that are used to configure the drivetrain */
   protected GenericDrivetrainConstants drivetrainConstants = new GenericDrivetrainConstants();
+  /** The internal pose supplier that is used by the drivetrain */
+  protected Supplier<Pose2d> internalPoseSupplier = () -> new Pose2d();
   /** The pose supplier */
-  protected Supplier<Pose2d> replaceMe = () -> new Pose2d();
-  protected Supplier<Pose2d> poseSupplier = () -> replaceMe.get();
+  protected Supplier<Pose2d> poseSupplier = () -> internalPoseSupplier.get();
+  /** The internal pose supplier that is used by the drivetrain */
+  protected Supplier<Pose2d> internalSimulatedPoseSupplier = () -> new Pose2d();
+  /** The pose supplier */
+  protected Supplier<Pose2d> simulatedPoseSupplier = () -> internalSimulatedPoseSupplier.get();
   /** The subsystem parser */
   public static SubsystemParser subsystemParser;
   /** Values that can be displayed on the dashboard */
@@ -327,7 +332,7 @@ public abstract class GenericRobot extends GenericMechanism implements GenericDe
    * @param poseSupplier the pose supplier
    */
   public void setPoseSupplier(Supplier<Pose2d> poseSupplier) {
-    this.replaceMe = poseSupplier;
+    this.internalPoseSupplier = poseSupplier;
   }
 
   /**
@@ -337,6 +342,24 @@ public abstract class GenericRobot extends GenericMechanism implements GenericDe
    */
   public Supplier<Pose2d> getPoseSupplier() {
     return poseSupplier;
+  }
+
+  /**
+   * Set the pose supplier
+   *
+   * @param poseSupplier the pose supplier
+   */
+  public void setSimulatedPoseSupplier(Supplier<Pose2d> poseSupplier) {
+    this.internalSimulatedPoseSupplier = poseSupplier;
+  }
+
+  /**
+   * Get the pose supplier
+   *
+   * @return the pose supplier
+   */
+  public Supplier<Pose2d> getSimulatedPoseSupplier() {
+    return simulatedPoseSupplier;
   }
 
   /**

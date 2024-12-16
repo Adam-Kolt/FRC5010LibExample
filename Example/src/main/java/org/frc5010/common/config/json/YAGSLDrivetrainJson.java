@@ -58,5 +58,6 @@ public class YAGSLDrivetrainJson implements DrivetrainPropertiesJson {
     robot.addSubsystem(
         ConfigConstants.DRIVETRAIN, drivetrain);
     robot.setPoseSupplier(() -> drivetrain.getPoseEstimator().getCurrentPose());
+    robot.setSimulatedPoseSupplier(() -> drivetrain.getMapleSimPose());
   }
 }
