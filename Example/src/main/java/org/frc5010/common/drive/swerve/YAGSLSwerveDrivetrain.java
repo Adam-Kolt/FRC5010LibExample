@@ -78,7 +78,7 @@ import swervelib.math.SwerveMath;
 import swervelib.parser.SwerveDriveConfiguration;
 import swervelib.parser.SwerveParser;
 import swervelib.telemetry.SwerveDriveTelemetry;
-import swervelib.telemetry.SwerveDriveTelemetry.TelemetryVerbosity;
+import swervelib.telemetry.SwerveDriveTelemetry.TelemetryVerbosity; 
 
 /** Add your docs here. */
 public class YAGSLSwerveDrivetrain extends SwerveDrivetrain {
@@ -130,7 +130,8 @@ public class YAGSLSwerveDrivetrain extends SwerveDrivetrain {
     SwerveDriveTelemetry.verbosity = TelemetryVerbosity.HIGH;
     try {
       File swerveJsonDirectory = new File(Filesystem.getDeployDirectory(), swerveType);
-      swerveDrive = new SwerveParser(swerveJsonDirectory).createSwerveDrive(maximumSpeed, new Pose2d(1, 4, Rotation2d.fromDegrees(0)));
+      swerveDrive = new SwerveParser(swerveJsonDirectory).createSwerveDrive(maximumSpeed,
+          new Pose2d(1, 4, Rotation2d.fromDegrees(0)));
     } catch (Exception e) {
       System.out.println(e.getMessage());
       throw new RuntimeException(e);
@@ -182,12 +183,24 @@ public class YAGSLSwerveDrivetrain extends SwerveDrivetrain {
 
   /** Setup AutoBuilder for PathPlanner. */
   public void setupPathPlanner() {
+    boolean enableFeedforward = true;
     AutoBuilder.configure(
         this::getPose, // Robot pose supplier
         this::resetOdometry, // Method to reset odometry (will be called if your auto has a starting
         // pose)
         this::getRobotVelocity, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
-        this::setChassisSpeedsWithAngleSupplier, // Method that will drive the robot given ROBOT
+        this::setChassisSpeedsWithAngleSupplier,
+        // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
+        // (speedsRobotRelative, moduleFeedForwards) -> {
+        //   if (enableFeedforward) {
+        //     swerveDrive.drive(
+        //         speedsRobotRelative,
+        //         swerveDrive.kinematics.toSwerveModuleStates(speedsRobotRelative),
+        //         moduleFeedForwards.linearForces());
+        //   } else {
+        //     swerveDrive.setChassisSpeeds(speedsRobotRelative);
+        //   }
+        // },
         // RELATIVE ChassisSpeeds
         new PPHolonomicDriveController( // PPHolonomicController is the built in path following controller for holonomic
                                         // drive trains
@@ -235,10 +248,13 @@ public class YAGSLSwerveDrivetrain extends SwerveDrivetrain {
    */
   public Command driveToPose(Pose2d pose) {
     // Create the constraints to use while pathfinding
-    PathConstraints constraints = new PathConstraints(
-        swerveDrive.getMaximumChassisVelocity(), swerveDrive.getMaximumChassisVelocity(),
-        swerveDrive.getMaximumChassisAngularVelocity(), swerveDrive.getMaximumChassisAngularVelocity());
-
+    PathConstraints constraints = new PathConstraints(getSwerveConstants().getkTeleDriveMaxSpeedMetersPerSecond(),
+        getSwerveConstants().getkTeleDriveMaxAccelerationUnitsPerSecond(),
+        getSwerveConstants().getkTeleDriveMaxAngularSpeedRadiansPerSecond(),
+        getSwerveConstants().getkTeleDriveMaxAngularAccelerationUnitsPerSecond());
+    // PathConstraints constraints = new PathConstraints(
+    //     swerveDrive.getMaximumChassisVelocity(), 4.0,
+    //     swerveDrive.getMaximumChassisAngularVelocity(), Units.degreesToRadians(720));
     // Since AutoBuilder is configured, we can use it to build pathfinding commands
     return AutoBuilder.pathfindToPose(
         pose,
@@ -288,20 +304,22 @@ public class YAGSLSwerveDrivetrain extends SwerveDrivetrain {
    * @param fieldRelativeSpeeds Field-Relative {@link ChassisSpeeds}
    * @return Command to drive the robot using the setpoint generator.
    */
-  public Command driveWithSetpointGeneratorFieldRelative(Supplier<ChassisSpeeds> fieldRelativeSpeeds) {
-    try {
-      return driveWithSetpointGenerator(() -> {
-        ChassisSpeeds speeds = fieldRelativeSpeeds.get();
-        speeds.toRobotRelativeSpeeds(getHeading());
-        return speeds;
 
-      });
-    } catch (IOException | ParseException e) {
-      DriverStation.reportError(e.toString(), true);
-    }
-    return Commands.none();
-
-  }
+   public Command driveWithSetpointGeneratorFieldRelative(Supplier<ChassisSpeeds> fieldRelativeSpeeds)
+   {
+     try
+     {
+       return driveWithSetpointGenerator(() -> {
+         return ChassisSpeeds.fromFieldRelativeSpeeds(fieldRelativeSpeeds.get(), getHeading());
+ 
+       });
+     } catch (Exception e)
+     {
+       DriverStation.reportError(e.toString(), true);
+     }
+     return Commands.none();
+ 
+   }
 
   /**
    * Command to drive the robot using translative values and heading as a
@@ -728,21 +746,24 @@ public class YAGSLSwerveDrivetrain extends SwerveDrivetrain {
   }
 
   @Override
-  public void simulationPeriodic() {  
+  public void simulationPeriodic() {
   }
 
   public void setAngleSupplier(DoubleSupplier angDoubleSupplier) {
     angleSpeedSupplier = angDoubleSupplier;
   }
 
-  public void setChassisSpeedsWithAngleSupplier(ChassisSpeeds chassisSpeeds, DriveFeedforwards feedforwards) {
+  public void setChassisSpeedsWithAngleSupplier(ChassisSpeeds chassisSpeeds, DriveFeedforwards moduleFeedForwards) {
     ChassisSpeeds angleSuppliedChassisSpeeds = new ChassisSpeeds(
         chassisSpeeds.vxMetersPerSecond,
         chassisSpeeds.vyMetersPerSecond,
         null != angleSpeedSupplier
             ? angleSpeedSupplier.getAsDouble()
             : chassisSpeeds.omegaRadiansPerSecond);
-    setChassisSpeeds(angleSuppliedChassisSpeeds);
+    swerveDrive.drive(
+        angleSuppliedChassisSpeeds,
+        swerveDrive.kinematics.toSwerveModuleStates(angleSuppliedChassisSpeeds),
+        moduleFeedForwards.linearForces());
   }
 
   @Override

@@ -188,9 +188,8 @@ public class DriveToPosition extends GenericCommand {
     // swerveSubsystem.getSwerveConstants().getkTeleDriveMaxSpeedMetersPerSecond()
     // ,0));
 
-    ChassisSpeeds chassisSpeeds = new ChassisSpeeds(
-        xSpeed, ySpeed, thetaSpeed);
-        chassisSpeeds.toFieldRelativeSpeeds(swerveSubsystem.getHeading());
+    ChassisSpeeds chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
+        xSpeed, ySpeed, thetaSpeed, swerveSubsystem.getHeading());
 
     SmartDashboard.putNumber("X Speed", chassisSpeeds.vxMetersPerSecond);
     SmartDashboard.putNumber("Y Speed", chassisSpeeds.vyMetersPerSecond);

@@ -94,11 +94,10 @@ public class DriveByAngle extends Command {
     heading.setAngle(180 * r);
 
     if (fieldOrientedDrive.get()) {
-      ChassisSpeeds chassisSpeeds = new ChassisSpeeds(
+      ChassisSpeeds chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
           x * maxChassisVelocity,
           y * maxChassisVelocity,
-          r * maxChassisRotation);
-      chassisSpeeds.toFieldRelativeSpeeds(drivetrainSubsystem.getHeading());
+          r * maxChassisRotation, drivetrainSubsystem.getHeading());
       drivetrainSubsystem.drive(chassisSpeeds,
           null);
     } else {

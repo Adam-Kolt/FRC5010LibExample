@@ -1,4 +1,11 @@
 {
+  "HALProvider": {
+    "Other Devices": {
+      "window": {
+        "visible": false
+      }
+    }
+  },
   "NTProvider": {
     "types": {
       "/FMSInfo": "FMSInfo",
@@ -24,6 +31,11 @@
         "right": 2961,
         "top": 79,
         "width": 16.541748046875,
+        "window": {
+          "visible": true
+        }
+      },
+      "/Shuffleboard/basic_robot/Auto Modes": {
         "window": {
           "visible": true
         }
@@ -63,7 +75,13 @@
     }
   },
   "NetworkTables": {
+    "Persistent Values": {
+      "open": false
+    },
     "transitory": {
+      "CameraPublisher": {
+        "open": true
+      },
       "DisplayValueSubsystem": {
         "Input": {
           "open": true
@@ -97,7 +115,6 @@
           "angular": {
             "open": true
           },
-          "open": true,
           "velocity_motor": {
             "open": true
           }

@@ -90,12 +90,10 @@ public class JoystickToSwerve extends Command {
 
     if (fieldOrientedDrive.getAsBoolean()) {
       Alliance alliance = allianceSupplier.get();
-      chassisSpeeds =
-          new ChassisSpeeds(
+      chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(    
               alliance == Alliance.Red ? -xSpeed : xSpeed,
               alliance == Alliance.Red ? -ySpeed : ySpeed,
-              turnSpeed);
-      chassisSpeeds.toRobotRelativeSpeeds(correctedRotation);
+              turnSpeed, correctedRotation);
     } else {
       chassisSpeeds = new ChassisSpeeds(xSpeed, ySpeed, turnSpeed);
     }

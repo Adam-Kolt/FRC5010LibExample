@@ -84,11 +84,10 @@ public class DefaultDriveCommand extends Command {
     heading.setAngle(180 * r);
 
     if (fieldOrientedDrive.get()) {
-      ChassisSpeeds chassisSpeeds = new ChassisSpeeds(
+      ChassisSpeeds chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
           x * maxChassisVelocity.get(),
           y * maxChassisVelocity.get(),
-          r * maxChassisRotation.get());
-      chassisSpeeds.toFieldRelativeSpeeds(drivetrainSubsystem.getHeading());
+          r * maxChassisRotation.get(),drivetrainSubsystem.getHeading());
       drivetrainSubsystem.drive(chassisSpeeds,
           null);
     } else {
