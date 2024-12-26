@@ -14,7 +14,6 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.units.AngleUnit;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.MutAngle;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.SuppliedValueWidget;
 
 /** Add an angle to the dashboard */
@@ -201,9 +200,5 @@ public class DisplayAngle {
 
   public double getAngleInDegrees() {
     return angle_.in(Degrees);
-  }
-
-  public void addToTab(String tab) {
-    Shuffleboard.getTab(table_).addDouble(name_, () -> angle_.in(Degrees));
   }
 }

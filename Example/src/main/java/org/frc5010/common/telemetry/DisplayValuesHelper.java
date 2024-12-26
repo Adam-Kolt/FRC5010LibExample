@@ -71,7 +71,7 @@ public class DisplayValuesHelper implements WpiHelperInterface {
      */
     private String getNtFolder() {
         if (!isDisplayed) return "SmartDashboard/" + tabName + "/" + layoutName;
-        return "Shuffleboard/" + tab.getTitle() + "/" + layout.getTitle();
+        return "Shuffleboard/" + tabName + "/" + layoutName;
     }
 
     /**

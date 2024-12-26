@@ -21,7 +21,7 @@ public class WpiDataLogging {
       DriverStation.startDataLog(DataLogManager.getLog(), false);
       DataLogManager.logNetworkTables(true);
 
-      Shuffleboard.getTab("Robot").addBoolean("Logging", () -> logging);
+      //Shuffleboard.getTab("Robot").addBoolean("Logging", () -> logging);
     }
   }
 
