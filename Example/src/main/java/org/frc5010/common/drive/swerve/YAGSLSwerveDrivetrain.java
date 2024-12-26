@@ -9,6 +9,7 @@ import static edu.wpi.first.units.Units.Meter;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -30,6 +31,7 @@ import org.frc5010.common.sensors.Controller;
 import org.frc5010.common.sensors.camera.QuestNav;
 import org.frc5010.common.subsystems.AprilTagPoseSystem;
 import org.frc5010.common.telemetry.DisplayBoolean;
+import org.ironmaple.simulation.SimulatedArena;
 import org.json.simple.parser.ParseException;
 
 import com.pathplanner.lib.auto.AutoBuilder;
@@ -47,6 +49,7 @@ import com.pathplanner.lib.util.swerve.SwerveSetpointGenerator;
 import edu.wpi.first.math.Vector;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
@@ -188,6 +191,9 @@ public class YAGSLSwerveDrivetrain extends SwerveDrivetrain {
     hasIssues = new DisplayBoolean(false, "Has Issues", logPrefix, LogLevel.COMPETITION);
     if (RobotBase.isSimulation() || useGlass) {
       initGlassWidget();
+    }
+    if (RobotBase.isSimulation()) {
+      SimulatedArena.getInstance().placeGamePiecesOnField();
     }
   }
 
@@ -748,6 +754,10 @@ public class YAGSLSwerveDrivetrain extends SwerveDrivetrain {
 
   @Override
   public void simulationPeriodic() {
+    int count = 0;
+    for (Pose3d note : SimulatedArena.getInstance().getGamePiecesByType("Note")) {
+        getField2d().getObject("Note" + count++).setPose(new Pose2d(note.getX(), note.getY(), new Rotation2d()));
+    }
   }
 
   public void setAngleSupplier(DoubleSupplier angDoubleSupplier) {

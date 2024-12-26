@@ -5,6 +5,9 @@
 package org.frc5010.common.config.json;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import edu.wpi.first.wpilibj.Filesystem;
+import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
 import java.io.File;
 import java.io.IOException;
@@ -24,6 +27,7 @@ public class YAGSLDrivetrainJson implements DrivetrainPropertiesJson {
   /** The gear ratio of the turning motor */
   public double turningMotorGearRatio = 1.0;
 
+  private GamePiecesJson gamePiecesJson;
   /**
    * The file names of the drive module's feed forward constants. These should
    * match what are used
@@ -43,6 +47,17 @@ public class YAGSLDrivetrainJson implements DrivetrainPropertiesJson {
       swerveConstants.getSwerveModuleConstants().addDriveMotorFF(moduleName, feedFwdConstants);
     }
     robot.setDrivetrainConstants(swerveConstants);
+        
+    if(RobotBase.isSimulation()) {
+      File fieldDirectory = new File(baseDirectory, "/field/");
+      if (fieldDirectory.exists()) {
+        File gamePiecesFile = new File(fieldDirectory, "game_pieces.json");
+        if (gamePiecesFile.exists()) {
+          gamePiecesJson =
+              new ObjectMapper().readValue(gamePiecesFile, GamePiecesJson.class);
+        }
+      }
+    }
     return;
   };
 
@@ -59,5 +74,6 @@ public class YAGSLDrivetrainJson implements DrivetrainPropertiesJson {
         ConfigConstants.DRIVETRAIN, drivetrain);
     robot.setPoseSupplier(() -> drivetrain.getPoseEstimator().getCurrentPose());
     robot.setSimulatedPoseSupplier(() -> drivetrain.getMapleSimPose());
+    gamePiecesJson.createGamePieces(drivetrain);
   }
 }
