@@ -62,6 +62,7 @@ public class SubsystemParser {
     // Read in the robot configuration
     SubsystemJson subsystemJson =
         new ObjectMapper().readValue(new File(directory, configFile), SubsystemJson.class);
+    genericSubsystem.setDisplay(subsystemJson.display);
     subsystemJson.configureSubsystem(genericSubsystem, directory);
   }
 }

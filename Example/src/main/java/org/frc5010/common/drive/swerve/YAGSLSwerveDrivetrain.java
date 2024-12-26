@@ -161,7 +161,7 @@ public class YAGSLSwerveDrivetrain extends SwerveDrivetrain {
     swerveDrive.setModuleEncoderAutoSynchronize(true, 3);
     // Enable if you want to resynchronize your absolute encoders and motor encoders
     // periodically when they are not moving.
-    //swerveDrive.pushOffsetsToEncoders();
+    // swerveDrive.pushOffsetsToEncoders();
     // Set the absolute encoder to be used over the internal encoder and push the
     // offsets onto it. Throws warning if not possible
 
@@ -736,8 +736,9 @@ public class YAGSLSwerveDrivetrain extends SwerveDrivetrain {
   /** 5010 Code */
   @Override
   public void periodic() {
-    // updateVisionMeasurements(questNav.getRobotPose().toPose2d(), Timer.getFPGATimestamp(),
-    //     VecBuilder.fill(0.01, 0.01, 0.01));
+    // updateVisionMeasurements(questNav.getRobotPose().toPose2d(),
+    // Timer.getFPGATimestamp(),
+    // VecBuilder.fill(0.01, 0.01, 0.01));
     // poseEstimator.update();
     hasIssues.setValue(hasIssues());
     if (RobotBase.isSimulation() || useGlass) {
