@@ -113,7 +113,7 @@ public class YAGSLSwerveDrivetrain extends SwerveDrivetrain {
     questNav = new QuestNav(new Transform3d(Meter.of(0), Meter.of(0), Meter.of(0.5), new Rotation3d()));
     questNav.resetPose();
 
-    this.maximumSpeed = constants.getkPhysicalMaxSpeedMetersPerSecond();
+    this.maximumSpeed = constants.getkTeleDriveMaxSpeedMetersPerSecond();
 
     // Angle conversion factor is 360 / (GEAR RATIO * ENCODER RESOLUTION)
     // In this case the gear ratio is 12.8 motor revolutions per wheel rotation.
@@ -792,16 +792,17 @@ public class YAGSLSwerveDrivetrain extends SwerveDrivetrain {
      * Converts driver input into a field-relative ChassisSpeeds that is controlled
      * by angular velocity.
      */
-    SwerveInputStream driveAngularVelocity = SwerveInputStream.of(swerveDrive,
-        leftY,
-        leftX)
-        .withControllerRotationAxis(rightX)
-        .deadband(0.07)
-        .scaleTranslation(0.8)
-        .allianceRelativeControl(true);
+    // SwerveInputStream driveAngularVelocity = SwerveInputStream.of(swerveDrive,
+    //     leftY,
+    //     leftX)
+    //     .withControllerRotationAxis(rightX)
+    //     .deadband(0.07)
+    //     .scaleTranslation(0.8)
+    //     .allianceRelativeControl(true);
 
-    return driveFieldOriented(driveAngularVelocity);
-    // return new TeleopDrive(this, leftX, leftY, rightX, isFieldOriented);
+    // return driveFieldOriented(driveAngularVelocity);
+    return new JoystickToSwerve(
+        this, leftY, leftX, rightX, isFieldOriented, () -> GenericRobot.getAlliance());
   }
 
   public Command createDefaultTestCommand(Controller driverXbox) {

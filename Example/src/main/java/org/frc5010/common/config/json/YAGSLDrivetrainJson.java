@@ -4,13 +4,10 @@
 
 package org.frc5010.common.config.json;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import edu.wpi.first.wpilibj.Filesystem;
-import edu.wpi.first.wpilibj.RobotBase;
-import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
 import java.io.File;
 import java.io.IOException;
+import java.util.Optional;
+
 import org.frc5010.common.arch.GenericRobot;
 import org.frc5010.common.config.ConfigConstants;
 import org.frc5010.common.constants.MotorFeedFwdConstants;
@@ -18,6 +15,11 @@ import org.frc5010.common.constants.RobotConstantsDef;
 import org.frc5010.common.constants.SwerveConstants;
 import org.frc5010.common.drive.swerve.YAGSLSwerveDrivetrain;
 import org.frc5010.common.subsystems.AprilTagPoseSystem;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import edu.wpi.first.wpilibj.RobotBase;
+import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
 
 /** Parameters for a YAGSLSwerveDrivetrain */
 public class YAGSLDrivetrainJson implements DrivetrainPropertiesJson {
@@ -27,7 +29,7 @@ public class YAGSLDrivetrainJson implements DrivetrainPropertiesJson {
   /** The gear ratio of the turning motor */
   public double turningMotorGearRatio = 1.0;
 
-  private GamePiecesJson gamePiecesJson;
+  private Optional<GamePiecesJson> gamePiecesJson = Optional.empty();
   /**
    * The file names of the drive module's feed forward constants. These should
    * match what are used
@@ -54,7 +56,7 @@ public class YAGSLDrivetrainJson implements DrivetrainPropertiesJson {
         File gamePiecesFile = new File(fieldDirectory, "game_pieces.json");
         if (gamePiecesFile.exists()) {
           gamePiecesJson =
-              new ObjectMapper().readValue(gamePiecesFile, GamePiecesJson.class);
+              Optional.ofNullable(new ObjectMapper().readValue(gamePiecesFile, GamePiecesJson.class));
         }
       }
     }
@@ -74,6 +76,6 @@ public class YAGSLDrivetrainJson implements DrivetrainPropertiesJson {
         ConfigConstants.DRIVETRAIN, drivetrain);
     robot.setPoseSupplier(() -> drivetrain.getPoseEstimator().getCurrentPose());
     robot.setSimulatedPoseSupplier(() -> drivetrain.getMapleSimPose());
-    gamePiecesJson.createGamePieces(drivetrain);
+    gamePiecesJson.ifPresent(it -> it.createGamePieces(drivetrain));
   }
 }
