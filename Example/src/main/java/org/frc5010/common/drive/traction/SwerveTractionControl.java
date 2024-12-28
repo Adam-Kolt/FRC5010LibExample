@@ -13,6 +13,7 @@ import edu.wpi.first.math.filter.LinearFilter;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /** Add your docs here. */
 public class SwerveTractionControl extends GenericSubsystem {
@@ -23,6 +24,10 @@ public class SwerveTractionControl extends GenericSubsystem {
     
     private DisplayDouble[] wheelSlipDisplays = new DisplayDouble[4];
 
+    private LinearFilter[] wheelSlipFilters = new LinearFilter[4];
+
+
+
     public SwerveTractionControl(Supplier<SwerveModuleState[]> swerveModuleStatesSupplier, SwerveDriveKinematics swerveDriveKinematics,
             Supplier<ChassisSpeeds> externallyMeasuredSpeedsSupplier) {
         super();
@@ -30,6 +35,11 @@ public class SwerveTractionControl extends GenericSubsystem {
         this.swerveModuleStatesSupplier = swerveModuleStatesSupplier;
         this.externallyMeasuredSpeedsSupplier = externallyMeasuredSpeedsSupplier;
         this.swerveDriveKinematics = swerveDriveKinematics;
+
+        for (int i = 0; i < wheelSlipFilters.length; i++) {
+            wheelSlipFilters[i] = LinearFilter.movingAverage(5);
+            wheelSlipFilters[i].reset();
+        }
         
     }
 
@@ -40,7 +50,7 @@ public class SwerveTractionControl extends GenericSubsystem {
     }
 
     private double calculateSlippage(double measuredSpeed, double predictedSpeed) {
-        return measuredSpeed / predictedSpeed - 1;
+        return Math.max(Math.abs(measuredSpeed / predictedSpeed) - 1, 0);
     }
 
     public double[] getWheelSlip() {
@@ -50,7 +60,7 @@ public class SwerveTractionControl extends GenericSubsystem {
         double[] wheelSlips = new double[swerveModuleStates.length];
 
         for (int i = 0; i < swerveModuleStates.length; i++) {
-            wheelSlips[i] = calculateSlippage(swerveModuleStates[i].speedMetersPerSecond, predictedModuleStates[i].speedMetersPerSecond);
+            wheelSlips[i] = wheelSlipFilters[i].calculate(calculateSlippage(swerveModuleStates[i].speedMetersPerSecond, predictedModuleStates[i].speedMetersPerSecond));
         }
         return wheelSlips;
     }
@@ -61,6 +71,8 @@ public class SwerveTractionControl extends GenericSubsystem {
         for (int i = 0; i < wheelSlips.length; i++) {
             wheelSlipDisplays[i].setValue(wheelSlips[i]);
         }
+
+        SmartDashboard.putNumberArray("Wheel Slips", wheelSlips);
     }
 
 }
