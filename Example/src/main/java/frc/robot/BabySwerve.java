@@ -8,19 +8,28 @@ import org.frc5010.common.arch.GenericRobot;
 import org.frc5010.common.config.ConfigConstants;
 import org.frc5010.common.constants.SwerveConstants;
 import org.frc5010.common.drive.GenericDrivetrain;
+import org.frc5010.common.drive.swerve.YAGSLSwerveDrivetrain;
+import org.frc5010.common.drive.traction.SwerveTractionControl;
 import org.frc5010.common.sensors.Controller;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.AprilTagTests.TestOneAuto;
 
 /** This is an example robot class. */
 public class BabySwerve extends GenericRobot {
   SwerveConstants swerveConstants;
   GenericDrivetrain drivetrain;
   DisplayValueSubsystem displayValueSubsystem = new DisplayValueSubsystem();
+  SwerveTractionControl swerveTractionControl;
 
   public BabySwerve(String directory) {
     super(directory);
     drivetrain = (GenericDrivetrain) getSubsystem(ConfigConstants.DRIVETRAIN);
+
+    YAGSLSwerveDrivetrain drive = ((YAGSLSwerveDrivetrain) drivetrain);
+    
+    
+    initRealOrSim();
   }
 
   @Override
@@ -35,6 +44,13 @@ public class BabySwerve extends GenericRobot {
   @Override
   public void initAutoCommands() {
     drivetrain.setAutoBuilder();
+  }
+
+  @Override
+  public void buildAutoCommands() {
+    super.buildAutoCommands();
+    addAutoToChooser("Circle", new TestOneAuto());
+
   }
 
   @Override

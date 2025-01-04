@@ -6,6 +6,8 @@ package org.frc5010.common.sensors.camera;
 
 import static edu.wpi.first.units.Units.Degrees;
 
+import java.util.EnumSet;
+
 import org.frc5010.common.arch.GenericSubsystem;
 import org.frc5010.common.drive.pose.PoseProvider;
 
@@ -20,6 +22,7 @@ import edu.wpi.first.networktables.IntegerEntry;
 import edu.wpi.first.networktables.IntegerPublisher;
 import edu.wpi.first.networktables.IntegerSubscriber;
 import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableEvent;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -85,6 +88,15 @@ public class QuestNav extends GenericSubsystem implements PoseProvider {
         quaternion = networkTable.getFloatArrayTopic("quaternion").subscribe(new float[4]);
         eulerAngles = networkTable.getFloatArrayTopic("eulerAngles").subscribe(new float[3]);
         battery = networkTable.getDoubleTopic("battery").subscribe(0.0);
+
+        networkTable.addListener("position", EnumSet.of(NetworkTableEvent.Kind.kValueAll), (table, text, event) -> {
+            logPose();
+        });
+    }
+
+    public void logPose() {
+        SmartDashboard.putNumberArray("QuestNav Pose", new double[] {getPosition().getX(), getPosition().getY(), getRotation().getMeasureZ().in(Degrees)});
+
     }
 
     public Translation3d getRawPosition() {
@@ -187,9 +199,6 @@ public class QuestNav extends GenericSubsystem implements PoseProvider {
     public void periodic() {
         cleanUpQuestCommand();
         updateVelocity();
-        
-        ChassisSpeeds velocity = getVelocity();
-        SmartDashboard.putNumberArray("Velocity", new double[] {velocity.vxMetersPerSecond, velocity.vyMetersPerSecond, velocity.omegaRadiansPerSecond});
     }
 
 }

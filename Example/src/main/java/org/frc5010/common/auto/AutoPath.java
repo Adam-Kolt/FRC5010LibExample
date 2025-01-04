@@ -4,13 +4,18 @@
 
 package org.frc5010.common.auto;
 
+import static edu.wpi.first.units.Units.Meters;
+
+import java.util.List;
 import java.util.Optional;
 import java.util.function.BooleanSupplier;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.path.PathPlannerPath;
+import com.pathplanner.lib.path.PathPoint;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 
@@ -122,6 +127,16 @@ public class AutoPath {
      */
     public BooleanSupplier robotFarFromStart(double distance) {
         return () -> pathplannerPath.getStartingHolonomicPose().get().getTranslation().getDistance(AutoBuilder.getCurrentPose().getTranslation()) > distance;
+    }
+
+    /**
+     * gets the approximate length of the path based on its path points
+     * 
+     * @return the approximate length of the path
+     */
+    public Distance approximateLength() {
+        List<PathPoint> pathPoints = pathplannerPath.getAllPathPoints();
+        return Meters.of(pathPoints.get(pathPoints.size() - 1).distanceAlongPath);
     }
 
 }

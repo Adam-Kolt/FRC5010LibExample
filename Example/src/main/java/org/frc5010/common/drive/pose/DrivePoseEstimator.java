@@ -172,6 +172,14 @@ public class DrivePoseEstimator {
     return poseTracker.getGyroRotation2d();
   }
 
+  public void setAlternativePose(Pose2d pose) {
+    poseTracker.setAlternativePose(pose);
+  }
+
+  public void setMultipleRobotPoses(List<Pose2d> poses) {
+    poseTracker.setMultipleRobotPoses(poses);
+  }
+
   /**
    * Get the closest tag to the robot
    *

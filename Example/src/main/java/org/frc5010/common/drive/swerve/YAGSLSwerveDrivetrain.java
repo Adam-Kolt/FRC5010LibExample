@@ -4,6 +4,7 @@
 
 package org.frc5010.common.drive.swerve;
 
+import static edu.wpi.first.units.Units.Degrees;
 import static edu.wpi.first.units.Units.DegreesPerSecond;
 import static edu.wpi.first.units.Units.Meter;
 
@@ -60,6 +61,8 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.units.AngleUnit;
+import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.RobotBase;
@@ -89,7 +92,8 @@ import swervelib.telemetry.SwerveDriveTelemetry.TelemetryVerbosity;
 
 /** Add your docs here. */
 public class YAGSLSwerveDrivetrain extends SwerveDrivetrain {
-  /** Swerve drive object. */
+
+/** Swerve drive object. */
   private final SwerveDrive swerveDrive;
   /**
    * Maximum speed of the robot in meters per second, used to limit acceleration.
@@ -110,8 +114,8 @@ public class YAGSLSwerveDrivetrain extends SwerveDrivetrain {
       AprilTagPoseSystem visionSystem) {
     super(mechVisual, constants);
 
-    questNav = new QuestNav(new Transform3d(Meter.of(0), Meter.of(0), Meter.of(0.5), new Rotation3d()));
-    questNav.resetPose();
+    questNav = new QuestNav(new Transform3d(Meter.of(-0.02), Meter.of(-0.1), Meter.of(0.475), new Rotation3d(Degrees.of(0), Degrees.of(0), Degrees.of(-90))));
+    questNav.resetPose(new Pose3d(1, 4, 0, new Rotation3d()));
 
     this.maximumSpeed = constants.getkTeleDriveMaxSpeedMetersPerSecond();
 

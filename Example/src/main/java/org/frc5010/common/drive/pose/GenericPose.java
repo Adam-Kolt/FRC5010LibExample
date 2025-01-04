@@ -15,6 +15,9 @@ import edu.wpi.first.math.numbers.N5;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
+import java.util.List;
+
 import org.frc5010.common.sensors.gyro.GenericGyro;
 
 /** Base class for all pose estimators */
@@ -113,6 +116,15 @@ public abstract class GenericPose {
    */
   public double getGyroAngleZ() {
     return gyro.getAngleZ();
+  }
+
+  public void setAlternativePose(Pose2d pose) {
+    
+    field2d.getObject("Alternative Pose").setPose(pose);
+  }
+
+  public void setMultipleRobotPoses(List<Pose2d> poses) {
+    field2d.getRobotObject().setPoses(poses);
   }
 
   /**

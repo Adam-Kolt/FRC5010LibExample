@@ -1,0 +1,10 @@
+{
+  "download": {
+    "deleteAfter": false,
+    "localDir": "C:\\Users\\robot\\Downloads\\QuestNav",
+    "serverTeam": "5010"
+  },
+  "output": {
+    "outputFolder": "C:\\Users\\robot\\Downloads\\QuestNav"
+  }
+}
